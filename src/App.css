@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+
+.react-datetime-picker__wrapper input {
+  border: none !important;
+}
