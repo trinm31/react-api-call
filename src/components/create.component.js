@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createBook } from "../functions/book";
 import DateTimePicker from "react-datetime-picker";
-//import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const initialBook = {
   name: "",
@@ -14,9 +14,14 @@ const initialBook = {
 const CreateComponent = () => {
   const [book, setBook] = useState(initialBook);
   const [date, setDate] = useState(new Date());
-  //const counter = useSelector((state) => state.counter);
+  const counter = useSelector((state) => state.counter);
+  const user = useSelector((state) => state.user);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(book);
+  }, [book]);
 
   const onChange = (e) => {
     setBook({ ...book, [e.target.name]: e.target.value });
@@ -27,19 +32,18 @@ const CreateComponent = () => {
 
     book.publishDate = date;
     // call api
-    createBook(book)
+    createBook(book, user.token)
       .then((res) => {
+        // reset state book
+        setBook(initialBook);
         navigate("/");
       })
       .catch((err) => console.log(err));
-
-    // reset state book
-    setBook(initialBook);
   };
 
   return (
     <div className="container">
-      {/* <h1>Counter {counter}</h1> */}
+      <h1>Counter {counter}</h1>
       <h2>Add New Book</h2>
       <form onSubmit={onSubmit}>
         <div className="form-group">

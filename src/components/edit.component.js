@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { updateBook, getBookById } from "../functions/book";
 import DateTimePicker from "react-datetime-picker";
+import { useSelector } from "react-redux";
 
 const initialBook = {
   name: "",
@@ -21,12 +22,13 @@ const EditComponent = () => {
   const [book, setBook] = useState(initialBook);
   const [date, setDate] = useState(new Date());
   const [error, setError] = useState(initialError);
+  const user = useSelector((state) => state.user);
   const params = useParams();
   const navigation = useNavigate();
   const id = params.id;
 
   useEffect(() => {
-    getBookById(id)
+    getBookById(id, user.token)
       .then((res) => {
         setBook(res.data);
       })
@@ -57,14 +59,13 @@ const EditComponent = () => {
     if (validateInput()) {
       book.publishDate = date;
       // call api
-      updateBook(id, book)
+      updateBook(id, book, user.token)
         .then((res) => {
+          // reset state book
+          setBook(initialBook);
           navigation("/");
         })
         .catch((err) => console.log(err));
-
-      // reset state book
-      setBook(initialBook);
     }
   };
 

@@ -2,12 +2,21 @@ import React from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logoutSuccess } from "./redux/actions/user";
 
 import CreateComponent from "./components/create.component";
 import EditComponent from "./components/edit.component";
 import IndexComponent from "./components/index.component";
+import LoginComponent from "./components/login.component";
 
 function App() {
+  const dispatch = useDispatch();
+
+  const logout = () => {
+    dispatch(logoutSuccess());
+  };
+
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -38,6 +47,16 @@ function App() {
                   Create
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link to="/login" className="nav-link">
+                  Login
+                </Link>
+              </li>
+              <li className="nav-item">
+                <button onClick={() => logout()} className="nav-link">
+                  Logout
+                </button>
+              </li>
             </ul>
           </div>
         </div>
@@ -48,6 +67,7 @@ function App() {
         </Route>
         <Route path="create" element={<CreateComponent />} />
         <Route path="edit/:id" element={<EditComponent />} />
+        <Route path="login" element={<LoginComponent />} />
       </Routes>
     </>
   );
